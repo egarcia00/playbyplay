@@ -1,29 +1,46 @@
 import streamlit as st
 import pandas as pd
 import matplotlib as plt
-from functions_pbp import get_play_by_play, create_home_delta_plot
+from functions_pbp import get_play_by_play
+from functions_pbp import create_home_delta_plot
+from functions_pbp import get_all_nba_games
 from nba_api.stats.endpoints import playbyplayv2
 import numpy as np
+from datetime import datetime
 
-# Load your data (adjust the path to your actual data file)
-nba_games_id = pd.read_csv('nba_games_id.csv',  
-                            dtype= {'	Unnamed: 0':str, 
-                            'GAME_ID':str,
-                            'MATCHUP':str})[["GAME_ID","MATCHUP"]]
+st.title("NBA IN GAME LEAD TRACKER\n (1996-2023)")
+tab1, tab2 = st.tabs(['README', 'LEAD TRACKER'])
 
-# Streamlit app
+with tab1:
+    st.header("README")
 
-st.title("NBA Play-by-Play Data Viewer")
+with tab2:
+    st.header("LEAD TRACKER")
+    
+    with st.sidebar:
+        st.header("Filters:")
+        year_list = list(reversed(range(1996, 2024)))
+        selected_year = st.selectbox("Select a Year", year_list)
+        df_season_games = get_all_nba_games(selected_year)
 
-# Create a select box for matchups
-matchups = nba_games_id['MATCHUP'].unique()
+        if selected_year:
+            min_season_dates = datetime.strptime(df_season_games['GAME_DATE'].min(),'%Y-%m-%d').date()
+            max_season_dates = datetime.strptime(df_season_games['GAME_DATE'].max(),'%Y-%m-%d').date()
+            selected_date = st.date_input("Select a date", 
+                                            value=min_season_dates, 
+                                            min_value=min_season_dates, 
+                                            max_value=max_season_dates, 
+                                            format="YYYY/MM/DD"
+                                            )
+            if selected_date:
+                # daily_matches = df_season_games.loc[df_season_games['GAME_DATE']==selected_date]['MATCHUP'].unique()
+                # daily_matches = df_season_games['MATCHUP'].unique()
+                matchup = st.selectbox('Select Matchup', list(df_season_games.loc[df_season_games['GAME_DATE']==str(selected_date)]['MATCHUP']))
+                game_id = str(df_season_games.loc[  (df_season_games['MATCHUP']==matchup) & 
+                                                    (df_season_games['GAME_DATE']==str(selected_date))
+                                                ]['GAME_ID'].tolist()[0])
+                
 
-with st.form(key='my_form'):
-    matchup=st.selectbox('Select Matchup.', list(nba_games_id['MATCHUP']))
-    submit_button = st.form_submit_button(label='Submit')
-
-if submit_button:
-    game_id = nba_games_id['GAME_ID'].loc[nba_games_id['MATCHUP']==matchup]
     df = get_play_by_play(game_id)
     # Use Streamlit to create and display the plot
     st.pyplot(create_home_delta_plot(df))

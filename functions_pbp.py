@@ -1,7 +1,9 @@
 from nba_api.stats.endpoints import playbyplayv2
+from nba_api.stats.endpoints import leaguegamelog
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 def get_play_by_play(GAME_ID,perspective='HomeScore'):
     # Fetch the play-by-play data for the specified game
@@ -58,7 +60,6 @@ def get_play_by_play(GAME_ID,perspective='HomeScore'):
 
     return result_df
 
-
 def create_home_delta_plot(df):
     font = {'family': 'arial',
         'color':  'darkblue',
@@ -95,3 +96,26 @@ def create_home_delta_plot(df):
     plt.ylabel('Home Delta', fontdict=font)
 
     return fig
+
+def get_all_nba_games(season):
+    # Initialize an empty list to store game data
+    all_games = []
+
+    # Specify the range of seasons you want to cover
+    # For example, from the 1946-47 season to the 2020-21 season
+    season_str = f"{season}-{str(season+1)[-2:]}"
+    # print(f"Fetching games for season: {season_str}")
+
+    for game_type in ["Playoffs","Regular Season"]:
+        # Fetch the game logs for the season
+        game_log = leaguegamelog.LeagueGameLog(season=season_str,season_type_all_star=game_type)
+        games = game_log.get_data_frames()[0]
+
+        # Append the data to the all_games list
+        all_games.append(games)
+
+        # Combine all seasons into a single DataFrame
+        all_games_df = pd.concat(all_games, ignore_index=True)
+    filtered_df = all_games_df[~all_games_df["MATCHUP"].str.contains("@")]
+    filtered_df = filtered_df.reset_index(drop=True)
+    return filtered_df
