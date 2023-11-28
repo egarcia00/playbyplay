@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib as plt
-
-
-# Assuming the get_play_by_play function is defined elsewhere and it returns a plot
+# import matplotlib as plt
 from functions import get_play_by_play
 
 # Load your data (adjust the path to your actual data file)
