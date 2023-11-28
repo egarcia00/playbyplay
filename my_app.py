@@ -18,6 +18,6 @@ with st.form(key='my_form'):
     matchup=st.selectbox('Select Matchup.', list(nba_games_id['MATCHUP']))
     submit_button = st.form_submit_button(label='Submit')
 
-if submit_button:
-    game_id = nba_games_id['GAME_ID'].loc[nba_games_id['MATCHUP']==matchup]
-    get_play_by_play(game_id)
+# if submit_button:
+#     game_id = nba_games_id['GAME_ID'].loc[nba_games_id['MATCHUP']==matchup]
+#     get_play_by_play(game_id)
