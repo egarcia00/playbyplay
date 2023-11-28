@@ -1,7 +1,8 @@
-import my_app as st
+import streamlit as st
 import pandas as pd
 import matplotlib as plt
 from functions import get_play_by_play
+from nba_api.stats.endpoints import playbyplayv2
 
 # Load your data (adjust the path to your actual data file)
 nba_games_id = pd.read_csv('nba_games_id.csv')
