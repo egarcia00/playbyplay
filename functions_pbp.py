@@ -61,11 +61,7 @@ def get_play_by_play(GAME_ID,perspective='HomeScore'):
     return result_df
 
 def create_home_delta_plot(df):
-    font = {'family': 'arial',
-        'color':  'darkblue',
-        'weight': 'normal',
-        'size': 14,
-        }
+    
     fig, ax = plt.subplots()
     ax.plot(df['HomeDelta'])
     ax.hlines(y=0, xmin=0, xmax=df.shape[0], colors='black')
@@ -92,8 +88,8 @@ def create_home_delta_plot(df):
     x_labels = [(12 * 60 * 1), (12 * 60 * 2), (12 * 60 * 3), (12 * 60 * 4)]
     plt.xticks(x_labels, labels=['Q1', 'Q2', 'Q3', 'Q4'])
     
-    plt.xlabel('Period / time (s)', fontdict=font)
-    plt.ylabel('Home Delta', fontdict=font)
+    plt.xlabel('Period / time (s)')
+    plt.ylabel('Home Delta')
 
     return fig
 
