@@ -203,13 +203,13 @@ def get_lineup_log(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID):
 
 # def lead_timeline_lineup(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID):
 
-            def lead_timeline_lineup(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID):
-                lineup_df = get_lineup_log(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID)
-                lead_timeline = get_lead_timeline(GAME_ID)
-                
-                merged_df = pd.merge(lead_timeline, lineup_df, 
-                                    left_on=['PERIOD', 'PCTIMESTRING'], 
-                                    right_on=['PERIOD', 'PCTIMESTRING'], 
-                                    how='left')
-                
-                return merged_df
+def lead_timeline_lineup(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID):
+    lineup_df = get_lineup_log(GAME_ID, HOMETEAM_ID, AWAYTEAM_ID)
+    lead_timeline = get_lead_timeline(GAME_ID)
+    
+    merged_df = pd.merge(lead_timeline, lineup_df, 
+                        left_on=['PERIOD', 'PCTIMESTRING'], 
+                        right_on=['PERIOD', 'PCTIMESTRING'], 
+                        how='left')
+    
+    return merged_df
