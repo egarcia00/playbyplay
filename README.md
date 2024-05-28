@@ -6,11 +6,8 @@
 - Creation of the following functions:
     - get_lead_timeline_vector
     - plot_lead_timeline_vector
+    - get_season_lead_timeline_vectors
     - get_season_data
-    - get_season
-
-
-
 
 ### 24.05.2024
 - Creation of the following functions:
